@@ -13,6 +13,7 @@ See the License for the specific language governing permissions and limitations 
 */
 package com.amazonaws.kinesisvideo.parser.examples;
 
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.kinesisvideo.parser.TestResourceUtil;
 import com.amazonaws.regions.Regions;
@@ -23,12 +24,19 @@ import java.io.IOException;
 
 public class KinesisVideoRendererExampleTest {
     /* long running test */
-    @Ignore
     @Test
     public void testExample() throws InterruptedException, IOException {
-        KinesisVideoRendererExample example = KinesisVideoRendererExample.builder().region(Regions.US_WEST_2)
-                .streamName("render-example-stream")
-                .credentialsProvider(new ProfileCredentialsProvider())
+        System.out.println(System.getenv("AWS_ACCESS_KEY_ID"));
+        System.out.println(System.getenv(" AWS_SECRET_ACCESS_KEY"));
+        System.out.println(System.getenv(" AWS_REGION"));
+
+        DefaultAWSCredentialsProviderChain temptemp = new DefaultAWSCredentialsProviderChain();
+        System.out.println("this is the temp");
+        System.out.println(temptemp.getCredentials());
+
+        KinesisVideoRendererExample example = KinesisVideoRendererExample.builder().region(Regions.EU_WEST_1)
+                .streamName("dummyStream")
+                .credentialsProvider(new DefaultAWSCredentialsProviderChain())
                 .inputVideoStream(TestResourceUtil.getTestInputStream("vogels_480.mkv"))
                 .renderFragmentMetadata(false)
                 .build();
@@ -36,11 +44,10 @@ public class KinesisVideoRendererExampleTest {
         example.execute();
     }
 
-    @Ignore
     @Test
     public void testDifferentResolution() throws InterruptedException, IOException {
         KinesisVideoRendererExample example = KinesisVideoRendererExample.builder().region(Regions.US_WEST_2)
-                .streamName("render-example-stream")
+                .streamName("dummyStream")
                 .credentialsProvider(new ProfileCredentialsProvider())
                 .inputVideoStream(TestResourceUtil.getTestInputStream("vogels_330.mkv"))
                 .renderFragmentMetadata(false)
@@ -49,12 +56,11 @@ public class KinesisVideoRendererExampleTest {
         example.execute();
     }
 
-    @Ignore
     @Test
     public void testConsumerExample() throws InterruptedException, IOException {
-        KinesisVideoRendererExample example = KinesisVideoRendererExample.builder().region(Regions.US_WEST_2)
-                .streamName("render-example-stream")
-                .credentialsProvider(new ProfileCredentialsProvider())
+        KinesisVideoRendererExample example = KinesisVideoRendererExample.builder().region(Regions.EU_WEST_1)
+                .streamName("12Many")
+                .credentialsProvider(new DefaultAWSCredentialsProviderChain())
                 // Display the tags in the frame viewer window
                 .renderFragmentMetadata(true)
                 // Use existing stream in KVS (with Producer sending)
